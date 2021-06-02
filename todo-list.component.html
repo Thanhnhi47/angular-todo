@@ -1,0 +1,63 @@
+<section class="todoapp" ng-controller="todoCtrl">
+    <header class="header">
+        <h1>todos</h1>
+        <input class="new-todo" placeholder="What needs to be done?" [(ngModel)]="todoTitle" (keyup.enter)="addTodo()" autofocus />
+    </header>
+    <section class="main">
+        <input id="toggle-all" class="toggle-all" type="checkbox" (change)="checkAllTodos()" />
+        <label for="toggle-all">Mark all as complete</label>
+        <ul class="todo-list" *ngFor="let todo of todosFiltered()">
+            <li>
+                <div class="view">
+                    <input class="toggle" type="checkbox" [(ngModel)]="todo.completed" />
+                    <label *ngIf="!todo.editing; else editingTodo" [ngClass]="{ completed: todo.completed }" (dblclick)="editTodo(todo)">
+            {{ todo.title }}</label
+          >
+          <ng-template #editingTodo>
+            <input
+              type="text"
+              class="todo-item-edit"
+              [(ngModel)]="todo.title"
+              (blur)="doneEdit(todo)"
+              (keyup.enter)="doneEdit(todo)"
+              (keyup.esc)="cancelEdit(todo)"
+              autofocus
+            />
+          </ng-template>
+          <button class="destroy" (click)="deleteTodo(todo.id)"></button>
+        </div>
+      </li>
+    </ul>
+  </section>
+  <footer class="footer">
+    <span class="todo-count"
+      ><strong>{{ remaining() }} item left</strong>
+    </span>
+    <ul class="filters">
+      <li>
+        <a [ngClass]="{ active: filter === 'all' }" (click)="filter = 'all'"
+          >All</a
+        >
+      </li>
+      <li>
+        <a
+          [ngClass]="{ active: filter === 'active' }"
+          (click)="filter = 'active'"
+          >Active</a
+        >
+      </li>
+      <li>
+        <a
+          [ngClass]="{ active: filter === 'completed' }"
+          (click)="filter = 'completed'"
+          >Completed</a
+        >
+      </li>
+    </ul>
+    <div *ngIf="atLeastOneCompleted()">
+      <button class="clear-completed" (click)="clearCompleted()">
+        Clear completed
+      </button>
+    </div>
+  </footer>
+</section>
